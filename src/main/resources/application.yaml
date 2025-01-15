@@ -1,0 +1,8 @@
+spring:
+    datasource:
+        url: "jdbc:mysql://localhost:3306/storedb"
+        username: root
+        password: phnm11
+
+jwt:
+    signerKey: "QZVNqC4gdyXEw1oxy+RlNNU15mDXWsBq0oFPISvpggW0+jVt10KE3B7qRBbt6YfO"

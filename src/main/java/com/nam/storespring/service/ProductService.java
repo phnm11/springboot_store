@@ -24,9 +24,13 @@ public class ProductService extends BaseRedisServiceImpl {
     @Autowired
     private ProductMapper productMapper;
 
-    public ProductService(RedisTemplate<String, Object> redisTemplate, ProductRepository productRepository) {
+    private final KafkaProducerService kafkaProducerService;
+
+    public ProductService(RedisTemplate<String, Object> redisTemplate, ProductRepository productRepository,
+            KafkaProducerService kafkaProducerService) {
         super(redisTemplate);
         this.productRepository = productRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     // Cache 1 product
@@ -36,10 +40,11 @@ public class ProductService extends BaseRedisServiceImpl {
         setTimeToLive(cacheKey, 1);
     }
 
-    public Product createProduct(ProductCreationRequest request) {
+    public ProductResponse createProduct(ProductCreationRequest request) {
         Product product = productMapper.toProduct(request);
-
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        kafkaProducerService.sendLog("product-logs", "ADD", savedProduct.getId(), savedProduct);
+        return productMapper.toProductResponse(savedProduct);
     }
 
     public List<Product> getProducts() {
@@ -52,6 +57,7 @@ public class ProductService extends BaseRedisServiceImpl {
         Product cachedProduct = (Product) get(cacheKey);
 
         if (cachedProduct != null) {
+            kafkaProducerService.sendMessage("product_views", id);
             return productMapper.toProductResponse(cachedProduct);
         }
 
@@ -59,6 +65,8 @@ public class ProductService extends BaseRedisServiceImpl {
                 .orElseThrow(() -> new RuntimeException("Product not found!"));
 
         cacheProduct(id, productFromDB);
+
+        kafkaProducerService.sendMessage("product_views", id);
 
         return productMapper.toProductResponse(productFromDB);
         // return
@@ -72,12 +80,19 @@ public class ProductService extends BaseRedisServiceImpl {
 
         productMapper.updateProduct(product, request);
 
-        return productMapper.toProductResponse(productRepository.save(product));
+        Product updatedProduct = productRepository.save(product);
+
+        kafkaProducerService.sendLog("product-logs", "UPDATE", id, updatedProduct);
+
+        return productMapper.toProductResponse(updatedProduct);
     }
 
     public void deleteProduct(String id) {
         String cacheKey = "product:" + id;
+        Product productDeleted = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found!"));
         productRepository.deleteById(id);
         delete(cacheKey);
+        kafkaProducerService.sendLog("product-logs", "DELETE", id, productDeleted);
     }
 }

@@ -28,5 +28,7 @@ public class ProductResponse {
 
     Date createdAt;
 
+    int views;
+
     List<ReviewResponse> reviews;
 }

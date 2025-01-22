@@ -3,6 +3,11 @@ spring:
         url: "jdbc:mysql://localhost:3306/storedb"
         username: root
         password: phnm11
+    kafka:
+        bootstrap-servers: localhost:9092
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 jwt:
     signerKey: "QZVNqC4gdyXEw1oxy+RlNNU15mDXWsBq0oFPISvpggW0+jVt10KE3B7qRBbt6YfO"

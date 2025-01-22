@@ -37,6 +37,8 @@ public class Product {
     @Column(name = "created_at")
     private Date createdAt;
 
+    private int views;
+
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
 

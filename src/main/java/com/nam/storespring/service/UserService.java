@@ -23,6 +23,13 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    private KafkaProducerService kafkaProducerService;
+
+    public UserService(UserRepository userRepository, KafkaProducerService kafkaProducerService) {
+        this.userRepository = userRepository;
+        this.kafkaProducerService = kafkaProducerService;
+    }
+
     public UserResponse createUser(UserCreationRequest request) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -39,19 +46,23 @@ public class UserService {
 
         user.setRole(Role.USER.name());
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        User createdUser = userRepository.save(user);
+
+        kafkaProducerService.sendLog("user-logs", "ADD", createdUser.getId(), createdUser);
+
+        return userMapper.toUserResponse(createdUser);
     }
 
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    public UserResponse getUser(int id) {
+    public UserResponse getUser(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!")));
     }
 
-    public UserResponse updateUser(int id, UserUpdateRequest request) {
+    public UserResponse updateUser(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
@@ -66,10 +77,18 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        User updatedUser = userRepository.save(user);
+
+        kafkaProducerService.sendLog("user-logs", "UPDATE", id, updatedUser);
+
+        return userMapper.toUserResponse(updatedUser);
     }
 
-    public void deleteUser(int id) {
+    public void deleteUser(String id) {
+        User deletedUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
         userRepository.deleteById(id);
+        kafkaProducerService.sendLog("user-logs", "DELETE", id, deletedUser);
     }
 }

@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nam.storespring.dto.request.UserCreationRequest;
 import com.nam.storespring.dto.request.UserUpdateRequest;
 import com.nam.storespring.dto.response.UserResponse;
+import com.nam.storespring.dto.response.UserSearchResponse;
 import com.nam.storespring.entity.User;
+import com.nam.storespring.service.SearchService;
 import com.nam.storespring.service.UserService;
 
 import jakarta.validation.Valid;
@@ -28,6 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    private final SearchService searchService;
+
+    public UserController(UserService userService, SearchService searchService) {
+        this.userService = userService;
+        this.searchService = searchService;
+    }
 
     @PostMapping
     public UserResponse createUser(@RequestBody @Valid UserCreationRequest request) {
@@ -60,4 +70,17 @@ public class UserController {
         userService.deleteUser(userId);
         return "User has been deleted";
     }
+
+    @GetMapping("/search")
+    public List<UserSearchResponse> searchUser(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Integer phone,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String role) {
+        return searchService.searchUser(firstName, lastName, userName, email, phone, address, role);
+    }
+
 }

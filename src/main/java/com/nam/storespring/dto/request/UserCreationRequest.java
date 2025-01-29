@@ -29,5 +29,4 @@ public class UserCreationRequest {
     int phone;
     String address;
     String role;
-    Date createdAt;
 }

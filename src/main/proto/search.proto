@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package com.nam.searchitem;
+
+option java_multiple_files = true;
+option java_package = "com.nam.searchitem";
+option java_outer_classname = "SearchProto";
+
+service SearchService {
+    rpc SearchUser (SearchUserRequest) returns (SearchUserResponse);
+    rpc SearchProduct (SearchProductRequest) returns (SearchProductResponse);
+}
+
+message SearchProductRequest {
+    string query = 1;
+    string type = 2;
+}
+
+message Product {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    int32 stock = 5;
+    string categoryId = 6;
+    string imageUrl = 7;
+    int32 views = 8;
+}
+
+message User {
+    string id = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string userName = 4;
+    string email = 5;
+    int32 phone = 6;
+    string address = 7;
+    string role = 8;
+}
+
+message SearchUserRequest {
+    string firstName = 1;
+    string lastName = 2;
+    string userName = 3;
+    string email = 4;
+    int32 phone = 5;
+    string address = 6;
+    string role = 7;
+}
+
+message SearchProductResponse {
+    repeated Product products = 1;
+}
+
+message SearchUserResponse {
+    repeated User users = 1;
+}
+

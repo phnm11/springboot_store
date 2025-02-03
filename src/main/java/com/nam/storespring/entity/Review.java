@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,14 +23,10 @@ public class Review {
     String id;
 
     @Column(name = "user_id")
-    int userId;
+    String userId;
 
     @Column(name = "product_id")
     String productId;
-
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "product_id", nullable = false)
-    // private Product product;
 
     int rating;
 

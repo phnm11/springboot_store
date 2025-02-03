@@ -1,7 +1,5 @@
 package com.nam.storespring.dto.request;
 
-import java.sql.Date;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewRequest {
-    int userId;
 
     String productId;
 

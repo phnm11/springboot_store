@@ -7,7 +7,9 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.nam.storespring.dto.request.AuthenticationRequest;
@@ -83,7 +85,7 @@ public class AuthenticationService {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUserName())
+                .subject(user.getId())
                 .issuer("nam.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
@@ -102,5 +104,10 @@ public class AuthenticationService {
             log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public String getCurrentUserId() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwt.getSubject();
     }
 }

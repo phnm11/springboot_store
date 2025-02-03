@@ -2,7 +2,6 @@ package com.nam.storespring.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +19,12 @@ import com.nam.storespring.service.ReviewService;
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
-    @Autowired
+
     private ReviewService reviewService;
+
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
+    }
 
     @GetMapping
     public List<Review> getReviews() {

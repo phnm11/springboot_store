@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,7 +37,7 @@ public class Product {
     private String imageUrl;
 
     @Column(name = "created_at")
-    @CurrentTimestamp
+    @CreationTimestamp
     private Date createdAt;
 
     private int views;

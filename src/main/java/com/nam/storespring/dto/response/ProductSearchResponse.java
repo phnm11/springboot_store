@@ -1,7 +1,5 @@
 package com.nam.storespring.dto.response;
 
-import java.sql.Date;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

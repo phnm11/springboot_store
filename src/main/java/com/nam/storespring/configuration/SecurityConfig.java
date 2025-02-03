@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_POST = { "/users", "/auth/login", "/auth/introspect" };
 
-    private final String[] PUBLIC_GET = { "/products", "/products/search" };
+    private final String[] PUBLIC_GET = { "/products", "/products/*", "/products/search" };
     @Value("${jwt.signerKey}")
     private String signerKey;
 

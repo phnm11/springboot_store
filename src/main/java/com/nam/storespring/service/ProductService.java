@@ -1,9 +1,7 @@
 package com.nam.storespring.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ProductService extends BaseRedisServiceImpl {
-    @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
     private ProductMapper productMapper;
 
     private final KafkaProducerService kafkaProducerService;
 
     public ProductService(RedisTemplate<String, Object> redisTemplate, ProductRepository productRepository,
-            KafkaProducerService kafkaProducerService) {
+            KafkaProducerService kafkaProducerService, ProductMapper productMapper) {
         super(redisTemplate);
         this.productRepository = productRepository;
         this.kafkaProducerService = kafkaProducerService;
+        this.productMapper = productMapper;
     }
 
     // Cache 1 product

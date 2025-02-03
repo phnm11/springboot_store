@@ -1,7 +1,5 @@
 package com.nam.storespring.dto.request;
 
-import java.sql.Date;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +19,5 @@ public class ProductCreationRequest {
     int stock;
     String categoryId;
     String imageUrl;
-    Date createdAt;
 
 }

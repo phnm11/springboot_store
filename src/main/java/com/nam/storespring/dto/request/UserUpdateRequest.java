@@ -1,7 +1,5 @@
 package com.nam.storespring.dto.request;
 
-import java.sql.Date;
-
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

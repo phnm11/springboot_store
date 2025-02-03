@@ -17,9 +17,7 @@ import lombok.experimental.FieldDefaults;
 public class ReviewResponse {
     String id;
 
-    int userId;
-
-    // String productId;
+    String userId;
 
     int rating;
 

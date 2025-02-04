@@ -67,8 +67,10 @@ public class ReviewService {
 
         String currentUserId = authenticationService.getCurrentUserId();
 
+        String currentUserScope = authenticationService.getCurrentUserScope();
+
         if (!review.getUserId().equals(currentUserId)
-                && !currentUserId.equals("813d9125-b8c7-46ac-8eb6-148a2bcf02c4")) {
+                && !currentUserScope.equals("ADMIN")) {
             throw new RuntimeException("You do not have permission to delete this review");
         }
         reviewRepository.deleteById(reviewId);

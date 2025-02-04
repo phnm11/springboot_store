@@ -21,6 +21,8 @@ public class SecurityConfig {
     private final String[] PUBLIC_POST = { "/users", "/auth/login", "/auth/introspect" };
 
     private final String[] PUBLIC_GET = { "/products", "/products/*", "/products/search" };
+
+    private final String[] ADMIN_GET = { "/users", "/review" };
     @Value("${jwt.signerKey}")
     private String signerKey;
 
@@ -30,7 +32,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 request -> request.requestMatchers(HttpMethod.POST, PUBLIC_POST).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_GET).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users").hasAuthority("SCOPE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, ADMIN_GET).hasAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products").hasAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products").hasAuthority("SCOPE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products").hasAuthority("SCOPE_ADMIN")

@@ -110,4 +110,9 @@ public class AuthenticationService {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return jwt.getSubject();
     }
+
+    public String getCurrentUserScope() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwt.getClaim("scope");
+    }
 }

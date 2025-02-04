@@ -12,6 +12,8 @@ import com.nam.storespring.dto.request.UserUpdateRequest;
 import com.nam.storespring.dto.response.UserResponse;
 import com.nam.storespring.entity.User;
 import com.nam.storespring.enums.Role;
+import com.nam.storespring.exception.AppException;
+import com.nam.storespring.exception.ErrorCode;
 import com.nam.storespring.mapper.UserMapper;
 import com.nam.storespring.repository.UserRepository;
 
@@ -35,10 +37,10 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         if (userRepository.existsByUserName(request.getUserName()))
-            throw new RuntimeException("Username already exists");
+            throw new AppException(ErrorCode.USER_EXISTED);
 
         if (userRepository.existsByEmail(request.getEmail()))
-            throw new RuntimeException("Email already exists");
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
 
         User user = userMapper.toUser(request);
 
@@ -53,8 +55,8 @@ public class UserService {
         return userMapper.toUserResponse(createdUser);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
     public UserResponse getUser(String id) {

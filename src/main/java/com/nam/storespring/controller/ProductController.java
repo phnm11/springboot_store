@@ -2,13 +2,12 @@ package com.nam.storespring.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nam.storespring.dto.request.ProductCreationRequest;
+import com.nam.storespring.dto.response.ApiResponse;
 import com.nam.storespring.dto.response.ProductResponse;
 import com.nam.storespring.dto.response.ProductSearchResponse;
-import com.nam.storespring.entity.Product;
 import com.nam.storespring.service.ProductService;
 import com.nam.storespring.service.SearchService;
 
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    @Autowired
     private ProductService productService;
 
     private final SearchService searchService;
@@ -35,33 +33,55 @@ public class ProductController {
     }
 
     @PostMapping
-    ProductResponse createProduct(@RequestBody ProductCreationRequest request) {
-        return productService.createProduct(request);
+    ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreationRequest request) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.createProduct(request));
+        return apiResponse;
     }
 
     @GetMapping
-    List<Product> getProducts() {
-        return productService.getProducts();
+    ApiResponse<List<ProductResponse>> getProducts() {
+        ApiResponse<List<ProductResponse>> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.getProducts());
+        return apiResponse;
     }
 
     @GetMapping("/{productId}")
-    ProductResponse getProduct(@PathVariable String productId) {
-        return productService.getProduct(productId);
+    ApiResponse<ProductResponse> getProduct(@PathVariable String productId) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.getProduct(productId));
+        return apiResponse;
     }
 
     @PutMapping("/{productId}")
-    ProductResponse updateProduct(@PathVariable String productId, @RequestBody ProductCreationRequest request) {
-        return productService.updateProduct(productId, request);
+    ApiResponse<ProductResponse> updateProduct(@PathVariable String productId,
+            @RequestBody ProductCreationRequest request) {
+
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.updateProduct(productId, request));
+
+        return apiResponse;
     }
 
     @DeleteMapping("/{productId}")
-    String deleteProduct(@PathVariable String productId) {
+    ApiResponse<String> deleteProduct(@PathVariable String productId) {
         productService.deleteProduct(productId);
-        return "Product with id " + productId + " has been deleted";
+
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        apiResponse.setResult("Product with id " + productId + " has been deleted");
+        return apiResponse;
     }
 
     @GetMapping("/search")
-    List<ProductSearchResponse> searchProducts(@RequestParam String name) {
-        return searchService.searchProduct(name);
+    ApiResponse<List<ProductSearchResponse>> searchProducts(@RequestParam String name) {
+
+        ApiResponse<List<ProductSearchResponse>> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(searchService.searchProduct(name));
+        return apiResponse;
     }
 }

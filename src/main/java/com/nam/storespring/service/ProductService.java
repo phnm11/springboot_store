@@ -44,8 +44,8 @@ public class ProductService extends BaseRedisServiceImpl {
         return productMapper.toProductResponse(savedProduct);
     }
 
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getProducts() {
+        return productRepository.findAll().stream().map(productMapper::toProductResponse).toList();
     }
 
     public ProductResponse getProduct(String id) {
@@ -66,9 +66,6 @@ public class ProductService extends BaseRedisServiceImpl {
         kafkaProducerService.sendMessage("product_views", id);
 
         return productMapper.toProductResponse(productFromDB);
-        // return
-        // productMapper.toProductResponse(productRepository.findByIdWithReviews(id)
-        // .orElseThrow(() -> new RuntimeException("Product not found!")));
     }
 
     public ProductResponse updateProduct(String id, ProductCreationRequest request) {

@@ -16,6 +16,8 @@ import com.nam.storespring.dto.response.ReviewResponse;
 import com.nam.storespring.entity.Review;
 import com.nam.storespring.service.ReviewService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
@@ -32,7 +34,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ReviewResponse createReview(@RequestBody ReviewRequest request) {
+    public ReviewResponse createReview(@RequestBody @Valid ReviewRequest request) {
         return reviewService.createReview(request);
     }
 

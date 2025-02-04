@@ -1,6 +1,9 @@
 package com.nam.storespring.entity;
 
 import java.sql.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +40,7 @@ public class User {
     private String role;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private Date createdAt;
 
     public String getId() {

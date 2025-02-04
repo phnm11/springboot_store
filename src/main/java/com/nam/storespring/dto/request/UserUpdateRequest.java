@@ -17,10 +17,10 @@ public class UserUpdateRequest {
     String firstName;
     String lastName;
 
-    @Size(min = 5, message = "Username must be at least 5 characters!")
+    @Size(min = 5, message = "USERNAME_INVALID")
     String userName;
 
-    @Size(min = 8, message = "Password must be at least 8 characters!")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
     int phone;
     String address;
